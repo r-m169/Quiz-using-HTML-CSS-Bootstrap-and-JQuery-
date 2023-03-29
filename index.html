@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href=".css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        #start,#quizbox,#restartquiz{
+            max-width: 800px; 
+            margin: 200px auto 0px auto;   
+           /* color:  #f96d00;  */
+        }
+        #line{
+            margin-top: 54px;
+        }
+    </style>
+</head>
+<body>
+
+            <!-------------------------Start Quiz------------------------->
+         
+            <div id="start" class="bg-light p-5 shadow" >
+                <h1 class="text-center">Quiz</h1>
+                  <hr class="mb-5">
+                  <input type="text" id="name" placeholder="Enter your name" class="form-control w-75 m-auto">
+                  <input type="button" value="Start Your Quiz"  class="btn btn-dark mt-3 m-auto d-block " id="startbtn">
+                </div>
+    
+            <!------------------------- Quiz Box------------------------->
+
+            <!-- part one -->
+            <div id="quizbox" class="bg-light p-5 shadow-lg">
+                <div class="row">
+                    <div class="col">
+                        <h4 id="changeplayername">Player</h4>
+                    </div>
+                    <div class="col">
+                        <h4 id="time" class="text-center">00.00</h4>
+                    </div>
+                    <div class="col">
+                        <h4 id="points" class="float-end">Points: 0</h4>
+                    </div>
+                </div>
+
+
+                <hr class="mb-5">
+                
+                
+                <!-- part two -->
+                <div class="row">
+                    <div class="col">
+                        <h2 id="question">Question</h2>
+                </div>
+
+
+                    <!-- part three -->
+                    <div class="row row-cols-2 ">
+                        <div class="col">
+                            <input type="button" value="a" class="opt btn btn-dark w-100 mt-4" id="a">
+                 </div>
+                 <div class="col">
+                       <input type="button" value="b" class="opt btn btn-dark w-100 mt-4" id="b">
+                </div>
+                <div class="col">
+                        <input type="button" value="c" class="opt btn btn-dark w-100 mt-4" id="c">
+                </div>
+                <div class="col">
+                        <input type="button" value="d" class="opt btn btn-dark w-100 mt-4" id="d">
+                </div>
+             </div>
+
+
+            <hr id="line">
+           
+                    <!-- part four--->
+                    
+                        <div class="col">
+                            <h4 id="question1">Question No. 0/0</h2>
+                    </div>
+                        <div class="col">
+                            <input type="button" value="Next" class="btn btn-outline-dark float-end w-50" id="next">
+                        </div>
+                </div>
+                    
+                </div>
+
+                    <!------------------------- restart------------------------->
+
+                    <div class="bg-light p-5 shadow-lg" id="restartquiz">
+                        <h4 id="fpoints" class="text-center">Final Points : 0</h2>
+                
+                
+                        <input type="button" value="Restart Quiz" class="btn btn-dark m-auto d-block mt-3" id="restartbtn">
+                    </div>
+            </div>     
+
+
+            <script src="js/bootstrap.bundle.min.js"></script>
+            <script src="js/jquery.js"></script>
+
+                <!------------------------- Questions------------------------->
+
+        <script>
+            var questions=[
+                {
+                    q:"Who is the father of the computer?",
+                    a:"James",
+                    b:"Carles Babbage",
+                    c:"Shaun",
+                    d:"Mark",
+                    ans:"b"
+                },
+                {
+                    q:"9*16/4+4-88?",
+                    a:"-48",
+                    b:"9",
+                    c:"48",
+                    d:"33",
+                    ans:"a"
+                },
+                {
+                    q:"Which search is equal to minimax search but eliminates the branches that can’t influence the final decision?",
+                    a: "Depth-first search",
+                    b: "Breadth-first search",
+                    c: "Alpha-beta pruning",
+                    d:"Binary Tree",
+                    ans:"a"
+                },
+                {
+                    q:"SUNDAY, MONDAY, WEDNESDAY, SATURDAY, WEDNESDAY Which day comes next?",
+                    a: "SUNDAY",
+                    b: "MONDAY",
+                    c: "WEDNESDAY ",
+                    d:"THURSDAY",
+                    ans:"b"
+                }
+
+            ];
+
+            // -------------------------Defults-----------------------
+            $("#quizbox").hide();
+            $("#restartquiz").hide();
+            
+
+            // -------------------------start quiz button-----------------------
+            $("#startbtn").click(function(){
+
+             // take the value of the name input to pass it to quizbox window
+  
+                var playername="";
+                playername=$("#name").val();
+                $("#start").hide();
+                $("#quizbox").show();
+
+                if(playername!=""){
+                $("#changeplayername").text(playername);
+
+                }
+                load();
+                startTime();
+
+            });
+             // -------------------------load questions-----------------------
+            
+             var count =0;
+            function load(){
+                $("#question").text(questions[count].q);
+                $("#a").val(questions[count].a);
+                $("#b").val(questions[count].b);
+                $("#c").val(questions[count].c);
+                $("#d").val(questions[count].d);
+                $("#question1").text(`Question No. ${count+1}/${len}`)
+
+               
+            }
+
+           
+
+                // -------------------------validation----------------------
+                var Points=0;
+                var len=questions.length;
+                
+                $(".opt").click(function(){
+                    validate=$(this).attr("id");
+                    // check if the choice is the right ans 
+                    if(validate ==questions[count].ans){
+                        $(this).css("background","green");
+                        Points++;
+                        $("#points").text("Points:"+Points);
+                    }
+                    else{
+                        $(this).css("background","red");
+                        
+                        $("#"+questions[count].ans).css("background","green").fadeOut().fadeIn();
+                    }
+                    $(".opt").prop("disabled","true")
+                    $("#next").show();
+                })
+
+             
+                         // -------------------------next button----------------------
+                         $("#next").click(function(){
+                            count++;
+    
+                            $(".opt").css("background","")
+                            $(".opt").prop("disabled","")
+                            
+                            if(count>=len){
+                                $("#quizbox").hide();
+                                $("#restartquiz").show();
+                                $("#fpoints").text(`Final Points ${Points}`);
+                            }else{
+                            load();
+                          }
+                          $("#next").hide();
+                         })
+
+                        // -------------------------restart button----------------------
+
+                          $("#restartbtn").click(function(){
+                            
+                          $("#quizbox").show();
+                          $("#restartquiz").hide();
+                          
+
+                          reset();
+                          load();
+                          })
+
+                        // -------------------------reset quiz--------------------------
+                        function reset(){
+                            count=0;
+                            Points=0;
+                            clearInterval(quiztime);
+                            $("#time").text("00:00");
+                            $("#points").text(`Points : 0`);
+                            $("#question1").text(`Question No. ${count+1}/${len}`);
+
+                        }
+                       //=======================Variables===============
+                       var totalmins=0;
+                       var converted_to_sec=0;
+                       var remaining_mins=0;
+                       var remaining_seconds=0
+                    //=======================start time function==============
+                function startTime(){
+                    totalmins=2;
+                    converted_to_sec=60*totalmins;
+
+                    function timer(){
+                        converted_to_sec--;
+                        remaining_mins=Math.floor(converted_to_sec/60);
+                        remaining_seconds=converted_to_sec%60;
+
+                        if(remaining_mins<=9 &&remaining_mins>=0){
+                            remaining_mins="0"+remaining_mins;
+                        }
+                        if(remaining_seconds<=9 &&remaining_seconds>=0){
+                            remaining_seconds="0"+remaining_seconds;
+                        }
+
+
+                            $("#time").text(`${remaining_mins}:${remaining_seconds}`);
+                            if(converted_to_sec==0){
+                                clearInterval(quiztime);
+                                $("#quizbox").hide();
+                                $("#restartquiz").show();
+
+                            }
+                        }
+                        var quiztime=setInterval(timer,1000); 
+
+                        }
+                    
+
+        </script>
+
+
+
+
+
+
+
+</body>
+</html> 
